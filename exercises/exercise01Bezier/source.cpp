@@ -172,7 +172,11 @@ public:
             //   Calculate the position of that point and push it to the 'points' array
             //   world_pos is the last point you placed (i.e. points.back())
 
-            //
+            if (points.size() >= 2) {
+                const auto curr = points[points.size() - 1];
+                const auto prev = points[points.size() - 2];
+                points.push_back(curr + (curr - prev));
+            }
 
             // After we first subdivided a curve, the new start point is the last endpoint. Therefore, start at 1
             continuity_index = 1;
@@ -191,8 +195,8 @@ public:
 
     bool onWindowResized(atcg::WindowResizeEvent& event)
     {
-        // On macOS and some Linux systems framebuffer size can differ from window size
-        // e.g. on macOS window size = 2 * framebuffer size on Retina screens
+        // On macOS and some Linux DEs framebuffer size can differ from window size
+        // e.g. on macOS framebuffer size = 2 * window size on Retina screens
         int w, h;
         glfwGetFramebufferSize(atcg::Application::get()->getWindow()->getNativeWindow(), &w, &h);
         camera->setProjection(0, static_cast<float>(w), 0, static_cast<float>(h));

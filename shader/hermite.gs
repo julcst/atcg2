@@ -9,12 +9,14 @@ in VS_OUT
     vec3 points[4];
 }gs_in[];
 
-float weight()
-
 vec3 hermite(float u, vec3 p0, vec3 p1, vec3 t0, vec3 t1)
 {
-    vec3 p;
-    //
+    float u2 = u*u;
+    float h0 = (1-u2) * (1+2*u);
+    float h1 = u * (1-u) * (1-u);
+    float h2 = -u2 * (1-u);
+    float h3 = (3 - 2*u) * u2;
+    vec3 p = h0 * p0 + h1 * t0 + h2 * t1 + h3 * p1;
     return p;
 }
 
