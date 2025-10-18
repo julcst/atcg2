@@ -5,14 +5,16 @@
 \begin{document}
 
 \section{Sheet G01 - Bézier Curves}
-Jonas ?, Julian Stamm
+Jonas Marcic, Julian Stamm
 
 \subsection{Assignment 4}
 
+\subsubsection{a)}
+
 \begin{align*}
-B_0^2(t)&=\binom{2}{0}(1-t)^2&=(1-t)^2&=1-2t-1t^2\\
+B_0^2(t)&=\binom{2}{0}(1-t)^2&=(1-t)^2&=1-2t+1t^2\\
 B_1^2(t)&=\binom{2}{1}t(1-t)&=2t(1-t)&=0+2t-2t^2\\
-B_2^2(t)&=\binom{2}{2}t^2&=t^2&=0+0t-1t^2
+B_2^2(t)&=\binom{2}{2}t^2&=t^2&=0+0t+1t^2
 \end{align*}
 \begin{align*}
 \implies
@@ -22,9 +24,59 @@ B_2^2(t)&=\binom{2}{2}t^2&=t^2&=0+0t-1t^2
 \mtx{
      1& 0& 0\\
     -2& 2& 0\\
-    -1&-1& 1
+    1&-2& 1
 }
 \mat{P}
+\end{align*}
+
+\subsubsection{b)}
+
+\begin{align*}
+    \left [
+    \begin{array}{ccc}
+        1 & (z\cdot t) & (z\cdot t)^2 \\
+    \end{array}
+    \right ] 
+    =
+    \left [
+    \begin{array}{ccc}
+        1 & t & t^2 \\
+    \end{array}
+    \right ] \cdot Z
+    \implies
+    Z =
+    \left [
+    \begin{array}{ccc}
+        1 & 0 & 0 \\
+        0 & z & 0 \\
+        0 & 0 & z^2 \\
+    \end{array}
+    \right ]
+\end{align*}
+
+\subsubsection{c)}
+
+\begin{align*}
+    &\left [
+    \begin{array}{ccc}
+        1 & t & t^2 \\
+    \end{array}
+    \right ] \cdot Z \cdot M \cdot P
+    =
+    \left [
+    \begin{array}{ccc}
+        1 & t & t^2 \\
+    \end{array}
+    \right ] \cdot M \cdot Q \cdot P
+    \\
+    &\implies Z M = M Q\\
+    &\implies Q = M^{-1} Z M\\
+    &\implies Q = 
+    \mtx{
+     1& 0& 0\\
+    1-z& z& 0\\
+    (1-z)^2& 2z(1-z)& z^2
+}
 \end{align*}
 
 \end{document}
