@@ -2,5 +2,6 @@
 build/
 bin/
 .vscode/
+external/
 **.aux
 **.log
