@@ -12,7 +12,7 @@ in VS_OUT
 vec3 hermite(float u, vec3 p0, vec3 p1, vec3 t0, vec3 t1)
 {
     float u2 = u*u;
-    float h0 = (1-u2) * (1+2*u);
+    float h0 = (1-u) * (1-u) * (1+2*u);
     float h1 = u * (1-u) * (1-u);
     float h2 = -u2 * (1-u);
     float h3 = (3 - 2*u) * u2;
