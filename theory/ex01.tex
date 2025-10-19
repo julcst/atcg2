@@ -79,4 +79,64 @@ B_2^2(t)&=\binom{2}{2}t^2&=t^2&=0+0t+1t^2
 }
 \end{align*}
 
+\subsubsection{d)}
+
+\begin{align*}
+    &\left [
+    \begin{array}{ccc}
+        1 & (z + (1-z)\cdot t) & (z + (1-z)\cdot t)^2 \\
+    \end{array}
+    \right ] 
+    =
+    \left [
+    \begin{array}{ccc}
+        1 & t & t^2 \\
+    \end{array}
+    \right ] \cdot Z
+    \implies
+    Z =
+    \left [
+    \begin{array}{ccc}
+        1 & z & z^2 \\
+        0 & 1-z & 2z(1-z) \\
+        0 & 0 & (1-z)^2 \\
+    \end{array}
+    \right ]\\
+    &\implies Q = M^{-1} Z M\\
+    &\implies Q = 
+    \mtx{
+    (1-z)^2& 2z(1-z)& z^2\\
+    0& 1-z& z\\
+    0& 0& 1
+    }
+\end{align*}
+
+\subsection{Assignment 5}
+
+\subsubsection{a)}
+\begin{equation*}
+    p(u) = (1-u)^2 P_0 + 2u(1-u) P_1 + u^2 P_2, \quad u \in [0,1]
+\end{equation*}
+
+\subsubsection{b)}
+\begin{align*}
+x(u) &= -1(1-u)^2 + 0\cdot 2u(1-u) + 2u^2 = -1 + 2u + u^2,\\[4pt]
+y(u) &= 0(1-u)^2 + 1\cdot 2u(1-u) + 0\cdot u^2 = 2u - 2u^2.\\
+\implies p(u) &= \big(-1 + 2u + u^2,\; 2u - 2u^2\big)
+\end{align*}
+
+\subsubsection{c)}
+\begin{equation*}
+    B_0(u)=(1-u)^2,\quad B_1(u)=2u(1-u),\quad B_2(u)=u^2.
+\end{equation*}
+
+\subsubsection{d)}
+
+\subsubsection{e)}
+
+\subsubsection{f)}
+
+\subsubsection{g)}
+
+\subsubsection{h)}
 \end{document}
