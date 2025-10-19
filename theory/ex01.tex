@@ -155,8 +155,63 @@ y(u) &= 0(1-u)^2 + 1\cdot 2u(1-u) + 0\cdot u^2 = 2u - 2u^2.\\
 \end{figure}
 
 \subsubsection{e)}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+$u$ & $x(u)$ & $y(u)$ \\
+\hline
+0   & $-1.0$ & $0.0$\\
+0.25& $-0.4375$ & $0.375$\\
+0.50& $ 0.25$ & $0.5$\\
+0.75& $ 1.0625$ & $0.375$\\
+1.00& $ 2.0$ & $0.0$\\
+\hline
+\end{tabular}
+\end{center}
 
 \subsubsection{f)}
+\begin{align*}
+P_{01} &= (1-u)P_0 + uP_1,\\
+P_{12} &= (1-u)P_1 + uP_2,\\
+P_{012}&=(1-u)P_{01}+uP_{12}.
+\end{align*}
+
+\boxed{u=0}:
+\begin{align*}
+    P_{01} &= (-1,0),\\
+    P_{12} &= (0,1),\\
+    P_{012} &= (-1,0)
+\end{align*}
+
+\boxed{u=0.25}:
+\begin{align*}
+    P_{01} &= (-0.75,0.25),\\
+    P_{12} &= (0.5,0.75),\\
+    P_{012} &= (-0.4375,0.375)
+\end{align*}
+
+\boxed{u=0.5}:
+\begin{align*}
+P_{01} &= (-0.5,0.5),\\
+P_{12} &= (1.0,0.5),\\
+P_{012}&= (0.25,0.5).
+\end{align*}
+
+\boxed{u=0.75}:
+\begin{align*}
+P_{01} &= (-0.25,0.75),\\
+P_{12} &= (1.5,0.25),\\
+P_{012}&= (1.0625,0.375).
+\end{align*}
+
+\boxed{u=1}:
+\begin{align*}
+P_{01} &= (0,1),\\
+P_{12} &= (2,0),\\
+P_{012}&= (2,0).
+\end{align*}
+
+All results for $P_{012}$ match the results from e).
 
 \subsubsection{g)}
 
