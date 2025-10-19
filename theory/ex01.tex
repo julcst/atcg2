@@ -1,6 +1,8 @@
 \documentclass{article}
 \usepackage{amsmath}
 \usepackage{bm}
+\usepackage{graphicx}
+\usepackage{subcaption}
 \input{macros}
 \begin{document}
 
@@ -126,11 +128,31 @@ y(u) &= 0(1-u)^2 + 1\cdot 2u(1-u) + 0\cdot u^2 = 2u - 2u^2.\\
 \end{align*}
 
 \subsubsection{c)}
-\begin{equation*}
-    B_0(u)=(1-u)^2,\quad B_1(u)=2u(1-u),\quad B_2(u)=u^2.
-\end{equation*}
+\begin{figure}[htbp]
+\centering
+\begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\linewidth]{imgs/IMG_0305.jpg}
+    \caption{$B_0(u)=(1-u)^2$}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\linewidth]{imgs/IMG_0306.jpg}
+    \caption{$B_1(u)=2u(1-u)$}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.32\textwidth}
+    \includegraphics[width=\linewidth]{imgs/IMG_0307.jpg}
+    \caption{$B_2(u)=u^2$}
+\end{subfigure}
+\label{fig:three_horizontal}
+\end{figure}
 
 \subsubsection{d)}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imgs/Figure_1.png}
+    \caption{Bézier curve with control points $P_0=(-1,0)$, $P_1=(0,1)$, $P_2=(2,0)$}
+\end{figure}
 
 \subsubsection{e)}
 
