@@ -66,7 +66,11 @@ public:
         BezierBase base;
 
         // TODO
-        // 
+        base.coefficients[0] = (1 - t) * (1 - t) * (1 - t);
+        base.coefficients[1] = 3 * (1 - t) * (1 - t) * t;
+        base.coefficients[2] = 3 * (1 - t) * t * t;
+        base.coefficients[3] = t * t * t;
+        //
 
         return base;
     }
@@ -78,6 +82,20 @@ public:
         uint32_t m = 4, n = 4;
 
         // TODO
+        for (const auto u : samples) {
+            const auto F = getBezierCoefficients(u);
+            for (const auto v : samples) {
+                const auto G = getBezierCoefficients(v);
+                
+                auto q = atcg::Mesh::Point(0.0f);
+                for (auto i = 0; i < m; i++)
+                for (auto j = 0; j < n; j++)
+                {
+                    q += F.coefficients[i] * G.coefficients[j] * control_points[i * n + j];
+                }
+                points.push_back(std::move(q));
+            }
+        }
         // 
 
         return points;

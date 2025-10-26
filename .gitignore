@@ -5,3 +5,4 @@ bin/
 external/
 **.aux
 **.log
+imgui.ini
