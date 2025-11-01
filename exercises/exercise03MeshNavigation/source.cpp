@@ -71,8 +71,28 @@ public:
             //   depending on which type of iterators you use for finding neighboring vertices.
 
             // 
-        }
 
+            VertexHandle v = queue.top();
+            queue.pop();
+
+            if(v == vh_target) {
+                distance = mesh->property(property_distance, v);
+                break;
+            }
+            for (auto vv_it=mesh->vv_iter(v); vv_it.is_valid(); ++vv_it)
+            {
+                VertexHandle u = *vv_it;
+                atcg::Mesh::Point p_u = mesh->point(u);
+                atcg::Mesh::Point p_v = mesh->point(v);
+                double point_distance = (p_u - p_v).norm();
+                double new_distance = mesh->property(property_distance, v) + point_distance;
+                if(new_distance < mesh->property(property_distance, u)){
+                    mesh->property(property_distance, u) = new_distance;
+                    mesh->property(property_previous, u) = v;
+                    queue.push(u);
+                }
+            }
+        }
         return distance;
     }
 
@@ -90,6 +110,14 @@ public:
         // - Each vertex on the path has a property with its previous vertex in the shortest path
         // - The source vertex has distance 0.
         // 
+        double current_distance = mesh->property(property_distance, target_vh);
+        while (current_distance != 0)
+        {
+            current_vh = mesh->property(property_previous, current_vh);
+            current_distance = mesh->property(property_distance, current_vh);
+            result_path.push_back(current_vh);
+        }
+        
         assert(mesh->property(property_distance, result_path.back()) == 0);
 
         std::reverse(result_path.begin(), result_path.end());
