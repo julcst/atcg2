@@ -48,7 +48,23 @@ public:
             ///           - make sure to handle boundary (mesh->is_boundary) and feature (v_it->feature()) vertices
             ///           accordingly
 
-            // 
+            atcg::Mesh::Point new_pos(0.0, 0.0, 0.0);
+            auto vh = *v_it;
+
+            if(!(mesh->is_boundary(vh) || vh.feature()))
+            {
+                auto valence = vh.valence();
+                double alpha_n = (4.0 - 2.0 * cos(2.0 * M_PI / valence)) / 9.0;
+
+                atcg::Mesh::Point neighbor_sum(0.0, 0.0, 0.0);
+                for(auto vv_it = v_it->vertices().begin(); vv_it != v_it->vertices().end(); ++vv_it)
+                {
+                    neighbor_sum += mesh->point(*vv_it);
+                }
+
+                new_pos = (1.0 - alpha_n) * mesh->point(vh) + (alpha_n / valence) * neighbor_sum;
+                new_pos_property[vh] = new_pos;
+            }
         }
 
         // Split faces
@@ -63,14 +79,27 @@ public:
             ///           - split the faces at the centroid of each face (mesh->split)
             ///
 
-            // 
+            atcg::Mesh::Point centroid(0.0, 0.0, 0.0);
+            int num_v = 0;
+            for (auto v_it = f_it->vertices().begin(); v_it != f_it->vertices().end(); ++v_it)
+            {
+                centroid += mesh->point(*v_it);
+                num_v++;
+            }
+            centroid /= num_v;
+            
+            auto centroid_vh = mesh->add_vertex(centroid);
+            mesh->split(*f_it, centroid_vh);
         }
 
         // Set new vertex positions
         for(auto v_it = mesh->vertices_begin(); v_it != mesh->vertices_end(); ++v_it)
         {
-            if(mesh->is_boundary(*v_it) || v_it->feature()) continue;
-            mesh->point(*v_it) = new_pos_property[*v_it];
+            if (v_it->idx() < nv) // only change old vertices
+            {
+                if(mesh->is_boundary(*v_it) || v_it->feature()) continue;
+                mesh->point(*v_it) = new_pos_property[*v_it];
+            }
         }
 
         // Flip old edges
@@ -83,7 +112,10 @@ public:
             ///           - make sure you don't flip an edge which is a feature edge which can be checked with
             ///           e_it->feature
 
-            // 
+            if (!e_it->feature() && !mesh->is_boundary(e) && mesh->is_flip_ok(e))
+            {
+                mesh->flip(e);
+            }
         }
 
         // Update rendering
