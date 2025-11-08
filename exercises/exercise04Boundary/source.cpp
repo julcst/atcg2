@@ -24,8 +24,40 @@ public:
 
         // 
 
-        // Dummy solution
-        return Eigen::SparseMatrix<int>();
+        // init sparse matrix
+        int n_edges = mesh->n_edges();
+        int n_faces = mesh->n_faces();
+        Eigen::SparseMatrix<int> boundary_op(n_edges, n_faces);
+
+        std::vector<Eigen::Triplet<int>> triplets; // (edge_index, face_index, sign)
+
+        // iterate over all faces
+        for (auto fh : mesh->faces())
+        {
+            int face_idx = fh.idx();
+
+            // the face-halfedge circulator iterates over all halfedges of a face
+            // in a consistent (counter-clockwise) order therefore defines a fixed orientation of the face
+            for(auto heh = mesh->fh_ccwiter(fh); heh.is_valid(); ++heh) {
+                // get the edge corresponding to this halfedge
+                auto eh = mesh->edge_handle(*heh);
+                int edge_idx = eh.idx();
+
+                // determine the sign / orientation
+                // choice: direction of the edge is given by its first halfedge
+                auto heh_positive_orientation = mesh->halfedge_handle(eh, 0);
+
+                // check if orientations match
+                int sign = (*heh == heh_positive_orientation) ? 1 : -1;
+
+                triplets.emplace_back(edge_idx, face_idx, sign);
+            }
+        }
+
+        // construct sparse matrix
+        boundary_op.setFromTriplets(triplets.begin(), triplets.end());
+
+        return boundary_op;
     }
 
     Eigen::VectorXi compute_boundary_edges(const Eigen::SparseMatrix<int>& M)
@@ -35,8 +67,11 @@ public:
 
         // 
 
-        // Dummy solution
-        return Eigen::VectorXi();
+        // (n_edges x n_faces) * (n_faces x 1) = (n_edges x 1)
+        Eigen::VectorXi c = Eigen::VectorXi::Ones(mesh->n_faces());
+        Eigen::VectorXi boundary_edges = M * c;
+
+        return boundary_edges;
     }
 
     void color_mesh(const std::shared_ptr<atcg::Mesh>& mesh, const Eigen::VectorXi& sum)
@@ -47,6 +82,22 @@ public:
         ///           - Again, DO NOT use OpenMesh functions
 
         // 
+
+        for (int edge_idx = 0; edge_idx < sum.size(); ++edge_idx) 
+        {
+            if (sum[edge_idx] != 0)
+            {
+                // edge is boundary edge
+                // get vertices of edge
+                auto eh = mesh->edge_handle(edge_idx);
+                auto heh = mesh->halfedge_handle(eh, 0);
+                auto vh_from = mesh->from_vertex_handle(heh);
+                auto vh_to   = mesh->to_vertex_handle(heh);
+                // color vertices
+                mesh->set_color(vh_from, atcg::Mesh::Color(255, 0, 0));
+                mesh->set_color(vh_to, atcg::Mesh::Color(255, 0, 0));
+            }
+        }
     }
 
     // This is run at the start of the program
