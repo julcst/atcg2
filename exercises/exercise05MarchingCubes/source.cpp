@@ -70,9 +70,8 @@ public:
         ///           sphere
         virtual SDFResult operator()(const glm::vec3& p) override
         {
-            // 
-
-            return {0, glm::vec3(0)};
+            const auto d = glm::length(p - this->position) - this->radius;
+            return {d, this->color};
         }
     };
 
@@ -100,9 +99,9 @@ public:
         ///           box
         virtual SDFResult operator()(const glm::vec3& p) override
         {
-            // 
-
-            return {0, glm::vec3(0)};
+            const auto d = glm::abs(p - this->position);
+            // TODO
+            return {0.f, this->color};
         }
     };
 
@@ -148,9 +147,9 @@ public:
         ///             * sdf2 - The second sdf
         virtual SDFResult operator()(const glm::vec3& p) override
         {
-            // 
-
-            return {0, glm::vec3(0)};
+            const auto d1 = this->sdf1->operator()(p);
+            const auto d2 = this->sdf2->operator()(p);
+            return d1.sdf < d2.sdf ? d1 : d2;
         }
     };
 
@@ -165,9 +164,9 @@ public:
         ///             * sdf2 - The second sdf
         virtual SDFResult operator()(const glm::vec3& p) override
         {
-            // 
-
-            return {0, glm::vec3(0)};
+            const auto d1 = this->sdf1->operator()(p);
+            const auto d2 = this->sdf2->operator()(p);
+            return d1.sdf > d2.sdf ? d1 : d2;
         }
     };
 
@@ -182,9 +181,10 @@ public:
         ///             * sdf2 - The second sdf
         virtual SDFResult operator()(const glm::vec3& p) override
         {
-            // 
-
-            return {0, glm::vec3(0)};
+            const auto d1 = this->sdf1->operator()(p);
+            auto d2 = this->sdf2->operator()(p);
+            d2.sdf = -d2.sdf;
+            return d1.sdf < d2.sdf ? d1 : d2;
         }
     };
 
@@ -211,8 +211,9 @@ public:
         ///           - Be aware of potential divisions by 0
 
         // 
-
-        return (vector_1 + vector_2) / 2.0f;
+        float d = sdf_2 - sdf_1;
+        float t = d == 0.f ? 0.5f : (isovalue - sdf_1) / d;
+        return vector_1 + t * (vector_2 - vector_1);
     }
 
     void marching_cubes(const std::shared_ptr<SDFGrid>& grid, const std::shared_ptr<atcg::Mesh>& mesh)
@@ -244,13 +245,13 @@ public:
             ///
             glm::vec3 voxel_positions[8] = {
                 glm::vec3(voxel_start.x + O, voxel_start.y + O, voxel_start.z + O),
-                glm::vec3(0),
-                glm::vec3(0),
-                glm::vec3(0),
-                glm::vec3(0),
-                glm::vec3(0),
-                glm::vec3(0),
-                glm::vec3(0),
+                glm::vec3(voxel_start.x + I, voxel_start.y + O, voxel_start.z + O),
+                glm::vec3(voxel_start.x + I, voxel_start.y + I, voxel_start.z + O),
+                glm::vec3(voxel_start.x + O, voxel_start.y + I, voxel_start.z + O),
+                glm::vec3(voxel_start.x + O, voxel_start.y + O, voxel_start.z + I),
+                glm::vec3(voxel_start.x + I, voxel_start.y + O, voxel_start.z + I),
+                glm::vec3(voxel_start.x + I, voxel_start.y + I, voxel_start.z + I),
+                glm::vec3(voxel_start.x + O, voxel_start.y + I, voxel_start.z + I),
             };
 
             // 
@@ -265,6 +266,18 @@ public:
             ///           -If at least one voxel is invalid, we cannot generate any surface
             ///           -You can read the voxel at position p via (*grid)(p)
             // 
+            for(int i = 0; i < 8; ++i)
+            {
+                const auto p = voxel_positions[i];
+                if(!grid->insideVolume(p))
+                {
+                    all_valid = false;
+                    break;
+                }
+                SDFVoxel voxel_data = (*grid)(p);
+                sdf_values[i] = voxel_data.sdf;
+                color_values[i] = voxel_data.color;
+            }
 
             if(!all_valid) continue;
 
@@ -273,9 +286,16 @@ public:
 #define SET_BIT(ind, i) ind |= (1 << i)
 
             uint8_t cubeindex = 0;
-            /// Exercse: Calculate the cube index by encoding the sign of each neighboring voxel as one bit
+            /// Exercise: Calculate the cube index by encoding the sign of each neighboring voxel as one bit
             ///          -Use the SET_BIT makro to change the corresponding bit
             ///          -If the shading of your result is wrong, try inverting the criteria
+            for(int i = 0; i < 8; ++i)
+            {
+                if(sdf_values[i] > ISOVALUE)
+                {
+                    SET_BIT(cubeindex, i);
+                }
+            }
 
             // 
 
