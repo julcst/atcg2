@@ -99,9 +99,10 @@ public:
         ///           box
         virtual SDFResult operator()(const glm::vec3& p) override
         {
-            const auto d = glm::abs(p - this->position);
-            // TODO
-            return {0.f, this->color};
+            // Distance 
+            const auto q = glm::abs(p - this->position) - this->bound * 0.5f;
+            const auto d = glm::length(glm::max(q, 0.0f)) + std::min(vmax(q), 0.0f);
+            return {d, this->color};
         }
     };
 
@@ -130,9 +131,19 @@ public:
         ///           Cylinder
         virtual SDFResult operator()(const glm::vec3& p) override
         {
-            // 
+            glm::vec2 projected;
+            if(axis == 0)
+                projected = glm::vec2(p.y, p.z) - glm::vec2(position.y, position.z);
+            else if(axis == 1)
+                projected = glm::vec2(p.x, p.z) - glm::vec2(position.x, position.z);
+            else if(axis == 2)
+                projected = glm::vec2(p.x, p.y) - glm::vec2(position.x, position.y);
+            else
+                assert(false && "Axis must be 0, 1 or 2");
+            
+            const auto d = glm::length(projected) - this->radius;
 
-            return {0, glm::vec3(0)};
+            return {d, this->color};
         }
     };
 
@@ -181,9 +192,9 @@ public:
         ///             * sdf2 - The second sdf
         virtual SDFResult operator()(const glm::vec3& p) override
         {
-            const auto d1 = this->sdf1->operator()(p);
+            auto d1 = this->sdf1->operator()(p);
             auto d2 = this->sdf2->operator()(p);
-            d2.sdf = -d2.sdf;
+            d1.sdf = -d1.sdf;
             return d1.sdf < d2.sdf ? d1 : d2;
         }
     };
@@ -427,10 +438,22 @@ public:
                 /// Exercise: Replace the sdf by a csg that looks similar to the supplied figure
                 ///           -Hint: Surface Representations II: Slide 12
 
-                SDFHeart sdf_heart;
-                SDF* sdf = &sdf_heart;
+                // SDFHeart sdf_heart;
+                // SDF* sdf = &sdf_heart;
 
                 // 
+                SDFSphere sdf_sphere(glm::vec3(0), 1.0f, glm::vec3(0, 0, 1));
+                SDFBox sdf_box(glm::vec3(0), glm::vec3(1.4), glm::vec3(1, 0, 0));
+                SDFIntersection sdf_intersection(&sdf_sphere, &sdf_box);
+
+                SDFCylinder sdf_cylinder0(glm::vec3(0), 0.5f, 0, glm::vec3(0, 1, 0));
+                SDFCylinder sdf_cylinder1(glm::vec3(0), 0.5f, 1, glm::vec3(0, 1, 0));
+                SDFCylinder sdf_cylinder2(glm::vec3(0), 0.5f, 2, glm::vec3(0, 1, 0));
+                SDFUnion sdf_inner0(&sdf_cylinder0, &sdf_cylinder1);
+                SDFUnion sdf_inner1(&sdf_inner0, &sdf_cylinder2);
+                
+                SDFDifference sdf_diff(&sdf_intersection, &sdf_inner1);
+                SDF* sdf = &sdf_diff;
 
                 fillGrid(grid, sdf);
 
