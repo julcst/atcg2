@@ -1,0 +1,28 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\input{macros}
+\begin{document}
+
+\section{Sheet G01 - Implicit Surfaces and Marching Cubes}
+Robin Landsgesell, Jonas Marcic, Julian Stamm
+
+\subsection*{Assignment 3}
+
+Given: $M = \{x \in \Re^n | f(x)=0\}$ and\\
+$\gamma : \Re \rightarrow M$, with $\gamma(0) = x$ and $\gamma'(0) = v$\\
+\\
+To show: $\gradient f(x)$ is orthogonal to $v$, or $\gradient f(x)\cdot v = 0$\\
+\\
+Let $h(t) = f(\gamma(t))$, then $\forall t: h(t) = 0$, because $\forall t: \gamma(t) \in M$\\
+Furthermore $\forall t: h'(t) = 0$, because $h(t)$ is constant as shown above.\\
+Additionally $h'(t) = \gradient f(\gamma(t)) \cdot \gamma'(t)$, due to chain rule.\\
+Now let $t=0 \implies h'(0) = 0 = \gradient f(\underbrace{\gamma(0)}_{x}) \cdot \underbrace{\gamma'(0)}_{v}$\\
+$\implies 0 = \gradient f(x)\cdot v$ $\square$
+
+\subsection*{Assignment 4}
+
+\end{document}
