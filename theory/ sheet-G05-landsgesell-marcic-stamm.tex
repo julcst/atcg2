@@ -25,4 +25,52 @@ $\implies 0 = \gradient f(x)\cdot v$ $\square$
 
 \subsection*{Assignment 4}
 
+\subsection*{a)}
+The Marching Cubes algorithm extracts a piecewise linear surface from a sampled implicit function $f(x,y,z)$:
+
+\begin{enumerate}
+	\item Sample $f$ on a regular 3D grid (usually an SDF).  
+	\item For each grid cell (cube), classify its 8 corners as inside/outside ($f<0$ or $f>0$).  
+	\item Construct an 8-bit case index describing this pattern.  
+	\item Use a lookup table to determine which cube edges are intersected by the isosurface.  
+	\item Compute intersection points by linear interpolation on the intersected edges.  
+	\item Connect the intersection points into triangles according to the table.  
+	\item Optionally compute normals using the gradient $\nabla f$ via finite differences.  
+\end{enumerate}
+
+Result: a closed triangle mesh approximating the surface $f(x)=0$.
+
+\subsection*{b)}
+\textbf{Problems:}
+\begin{itemize}
+	\item Ambiguous cell configurations can produce holes or wrong topology.  
+	\item Loss of sharp features due to linear interpolation and coarse sampling.  
+	\item High memory cost for fine grids and aliasing in low resolutions.  
+\end{itemize}
+\textbf{Solutions:}
+\begin{itemize}
+	\item Use consistent lookup tables to resolve ambiguities.  
+	\item Feature-aware variants (Extended MC) using normals or directional distances.  
+	\item Adaptive sampling (ADFs) to refine only near the surface.  
+\end{itemize}
+
+\subsection*{c)}
+\textbf{Marching Cubes:}
+\begin{itemize}
+	\item Triangle output
+	\item uses scalar samples only
+	\item smooths sharp features
+	\item simple and fast
+\end{itemize}
+\textbf{Dual Contouring:}
+\begin{itemize}
+	\item Quad-dominant output
+	\item uses Hermite data (edge intersection + normals)
+	\item preserves sharp features
+	\item solves a QEF to place optimal cell vertices
+\end{itemize}
+\textbf{Usage:}
+Use MC when simplicity and speed matter (e.g.\ medical visualization).  
+Use DC when feature preservation, good polygon quality, and CAD-like surfaces are required.
+
 \end{document}
