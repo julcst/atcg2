@@ -223,7 +223,7 @@ public:
 
         // 
         float d = sdf_2 - sdf_1;
-        float t = d == 0.f ? 0.5f : (isovalue - sdf_1) / d;
+        float t = std::abs(d) < 1e-5f ? 0.5f : (isovalue - sdf_1) / d;
         return vector_1 + t * (vector_2 - vector_1);
     }
 
