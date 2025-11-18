@@ -302,7 +302,7 @@ public:
             ///          -If the shading of your result is wrong, try inverting the criteria
             for(int i = 0; i < 8; ++i)
             {
-                if(sdf_values[i] > ISOVALUE)
+                if(sdf_values[i] < ISOVALUE)
                 {
                     SET_BIT(cubeindex, i);
                 }
