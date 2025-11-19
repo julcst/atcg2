@@ -195,9 +195,16 @@ public:
 
                 /// TODO: Project the local frame of f onto the local_frame of p. You can use the function
                 /// rotateCoordinateSystem() for this
+                LocalFrame rotated_frame = rotateCoordinateSystem(local_frame_p, local_frame_f);
                 // 
 
                 /// TODO: Project the frame of each face onto the vertex (Eq. 7)
+                Eigen::Vector2f up {rotated_frame.x.dot(form.uf), rotated_frame.y.dot(form.uf)};
+                Eigen::Vector2f vp {rotated_frame.x.dot(form.vf), rotated_frame.y.dot(form.vf)};
+                Eigen::Matrix2d F {{form.e, form.f}, {form.f, form.g}};
+                ep += up.dot(F * up);
+                fp += up.dot(F * vp);
+                gp += vp.dot(F * vp);
                 // 
 
                 ++num_faces;
@@ -206,7 +213,10 @@ public:
             /// TODO: Average the results of each face
             ///       In the paper, they use a voronoi weighting. Feel free to implement that but you can also use a
             ///       simple mean over the number of neighboring faces (num_faces).
-
+            const auto weight = 1.0 / static_cast<double>(num_faces);
+            ep *= weight;
+            fp *= weight;
+            gp *= weight;
             // 
 
             /// TODO: The principal curvature is given by the eigenvalues of the second fundamental form. Compute both
@@ -215,6 +225,13 @@ public:
             double ev1 = 0;
             double ev2 = 0;
 
+            const double trace = ep + gp;
+            const double det   = ep * gp - fp * fp;
+            const double discr = trace * trace - 4.0 * det;
+            // discr should always be positive because F is symmetric so sqrt is safe
+            const double sqrt_discr = std::sqrt(discr);
+            ev1 = 0.5 * (trace + sqrt_discr);
+            ev2 = 0.5 * (trace - sqrt_discr);
             // 
             mesh->property(curvature, *v_it) = {ev1, ev2};
         }
