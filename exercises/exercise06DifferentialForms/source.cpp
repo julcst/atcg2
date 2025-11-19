@@ -50,6 +50,21 @@ public:
         return {localX, localY, localZ};
     }
 
+    struct UVFrame
+    {
+        atcg::Mesh::Point u, v;
+    };
+
+    UVFrame compute_orthonormal_basis(const atcg::Mesh::Point& t, const atcg::Mesh::Point& b)
+    {
+        // Normalize tangent
+        const auto nt = t.normalized();
+        // Orthonormalize the bitangent using Gram-Schmidt
+        const auto nb = (b - nt.dot(b) * nt).normalized();
+        //const auto n = nt.cross(nb); // We do not need normalization here as nt and nb are orthonormal
+        return {nt, nb};
+    }
+
     // Rotate source onto target
     LocalFrame rotateCoordinateSystem(const LocalFrame& target, const LocalFrame& source)
     {
@@ -98,6 +113,8 @@ public:
 
             /// TODO: Calculate remaining edges
             edges[0] = points[2] - points[1];
+            edges[1] = points[0] - points[2];
+            edges[2] = points[1] - points[0];
             // 
 
             /// TODO: Calculate normal differences
@@ -105,13 +122,16 @@ public:
             atcg::Mesh::Point nd02;
             atcg::Mesh::Point nd10;
 
+            nd21 = normals[2] - normals[1];
+            nd02 = normals[0] - normals[2];
+            nd10 = normals[1] - normals[0];
             // 
 
             atcg::Mesh::Point nd[3] = {nd21, nd02, nd10};
 
             /// TODO: Calculate an orthonormal frame (u,v) for the triangle. There are multiple approaches for this
             ///       One would be to calculate an orthonormalize two edges for example via Gram-Schmidt
-
+            const auto frame = compute_orthonormal_basis(edges[0], edges[1]);
             // 
 
             /// TODO: Get parameters of differential form via least squares
@@ -119,11 +139,42 @@ public:
             Eigen::MatrixXd A = Eigen::MatrixXd::Zero(6, 3);
             Eigen::VectorXd b = Eigen::VectorXd::Zero(6);
 
+            for (uint32_t i = 0; i < 3; i++) {
+                const auto eu = frame.u.dot(edges[i]);
+                const auto ev = frame.v.dot(edges[i]);
+
+                // | e f | | eu |
+                // | f g | | ev |
+                // =
+                // | e*eu + f*ev |
+                // | f*eu + g*ev |
+
+                // Encode row | e*eu + f*ev | = nd * u
+                const auto r0 = i * 2 + 0;
+                A(r0, 0) = eu;
+                A(r0, 1) = ev;
+                A(r0, 2) = 0;
+                b(r0) = nd[i].dot(frame.u);
+
+                // Encode row  | f*eu + g*ev | = nd * v
+                const auto r1 = i * 2 + 1;
+                A(r1, 0) = 0;
+                A(r1, 1) = eu;
+                A(r1, 2) = ev;
+                b(r1) = nd[i].dot(frame.v);
+            }
+
+            const auto efg = A.colPivHouseholderQr().solve(b).eval();
             // 
 
             /// TODO: Store the form data and the local frame into this struct
-            FundamentalFormFace form_data;
-
+            FundamentalFormFace form_data {
+                .e = efg(0),
+                .f = efg(1),
+                .g = efg(2),
+                .uf = frame.u,
+                .vf = frame.v,
+            };
             // 
 
             form_property[*f_it] = form_data;
