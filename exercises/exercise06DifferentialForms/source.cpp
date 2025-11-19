@@ -199,12 +199,12 @@ public:
                 // 
 
                 /// TODO: Project the frame of each face onto the vertex (Eq. 7)
-                Eigen::Vector2f up {rotated_frame.x.dot(form.uf), rotated_frame.y.dot(form.uf)};
-                Eigen::Vector2f vp {rotated_frame.x.dot(form.vf), rotated_frame.y.dot(form.vf)};
+                Eigen::Vector2d up {rotated_frame.x.dot(form.uf), rotated_frame.y.dot(form.uf)};
+                Eigen::Vector2d vp {rotated_frame.x.dot(form.vf), rotated_frame.y.dot(form.vf)};
                 Eigen::Matrix2d F {{form.e, form.f}, {form.f, form.g}};
-                ep += up.dot(F * up);
-                fp += up.dot(F * vp);
-                gp += vp.dot(F * vp);
+                ep += up.transpose() * F * up;
+                fp += up.transpose() * F * vp;
+                gp += vp.transpose() * F * vp;
                 // 
 
                 ++num_faces;
