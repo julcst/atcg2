@@ -1,0 +1,94 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{bigints}
+\input{macros}
+\begin{document}
+
+\section{Sheet G01 - Differential Geometry}
+Robin Landsgesell, Jonas Marcic, Julian Stamm
+
+\subsection*{Assignment 2}
+
+\subsection*{a)}
+	$q_u(u,v) = (1, 0, 2u), \qquad q_v(u,v) = (0, 1, 4v)$\\
+	\\
+	$E = q_u\boldsymbol{\cdot} q_u, \quad F = q_u\boldsymbol{\cdot} q_v, \quad G = q_v\boldsymbol{\cdot} q_v$\\
+	\\
+	$I(u,v)= \left [
+	\begin{array}{cc}
+		E & F \\
+		F & G \\
+	\end{array}
+	\right ] = 
+	\left [
+	\begin{array}{cc}
+		1 + 4u^2 & 8uv \\
+		8uv & 1 + 16v^2 \\
+	\end{array}
+	\right ] $
+	
+\subsection*{b)}
+
+	\begin{align*}
+		A &= \bigintsss\bigintss_D \sqrt{EG-F^2}\,dudv = \bigintsss\bigintss_D \sqrt{(1 + 4u^2)(1 + 16v^2)-(8uv)^2}\,dudv\\
+		  &= \bigintsss\bigintsss_D \sqrt{1 + 4u^2 + 16v^2 + 64u^2v^2 - 64u^2v^2}\,dudv = \bigintsss\bigintsss_D \sqrt{1 + 4u^2 + 16v^2}\,dudv
+	\end{align*}
+	Numerical Solving using CAS:\\
+	\begin{align*}
+	A = \bigintsss_0^1\bigintsss_0^1 \sqrt{1 + 4u^2 + 16v^2}\,dudv = 2.61676039985 
+	\end{align*}
+
+\subsection*{c)}
+
+	$q_{uu}(u,v) = (0, 0, 2), \quad q_{uv}(u,v) = (0, 0, 0), \qquad q_{vv}(u,v) = (0, 0, 4)$\\
+	\\
+	$n = \frac{\crossproduct{q_u(u,v)}{q_v(u,v)}}{\|\crossproduct{q_u(u,v)}{q_v(u,v)}\|_2} = \frac{(-2u,-4v,1)}{\|(-2u,-4v,1)\|_2}$\\
+	\\
+	With $u=v=1$: $n=\frac{(-2,-4,1)}{\|(-2,-4,1)\|_2} = \frac{(-2,-4,1)}{\sqrt{21}}$ \\
+	\\
+	$L = q_{uu}\boldsymbol{\cdot} n, \quad M = q_{uv}\boldsymbol{\cdot} n, \quad N = q_{vv}\boldsymbol{\cdot} n$\\
+	\\
+	$II(1,1)= \left [
+	\begin{array}{cc}
+		L & M \\
+		M & N \\
+	\end{array}
+	\right ] = 
+	\left [
+	\begin{array}{cc}
+		\frac{2}{\sqrt{21}} & 0 \\
+		0 & \frac{4}{\sqrt{21}} \\
+	\end{array}
+	\right ] $
+
+\subsection*{d)}
+
+	For $u=v=1$: $\kappa_G = \frac{LN-M^2}{EG-F^2} = \frac{\frac{2}{\sqrt{21}}\cdot \frac{4}{\sqrt{21}} - 0^2}{5\cdot 17-8^2} = \frac{\frac{8}{21}}{21} = \frac{8}{441}\approx 0.0181405$\\
+	\\
+	$\kappa_G = \frac{8}{441} > 0 \implies$ Elliptic point, local surface shaped like an
+	ellipsoid.
+
+\subsection*{e)}
+
+	Solve Eigenvalues of $det(II-\kappa_nI) = 0$\\
+	\\
+	$\implies 21\kappa^2-\frac{54}{\sqrt{21}}\kappa + \frac{8}{21} = 0$, Solving for $\kappa$\\
+	\\
+	$\kappa_{1,2} = \frac{\frac{54}{\sqrt{21}}\pm \sqrt{(\frac{54}{\sqrt{21}})^2-32}}{42}$\\
+	\\
+	$\kappa_1\approx 0.526689, \quad \kappa_1\approx 0.034442$\\
+	\\
+	Mean curvature without evaluating the integral: $\kappa_M = \frac{\kappa_1 + \kappa_2}{2} \approx 0.280565$\\
+	\\
+	For principal directions, solve Eigenvalue problem: $I^{-1}IIw=\kappa_nw$\\
+	\\
+	Solving numerically yields:\\
+	\\
+	$w_1 = (0.8867, -0.4623)^T, \quad w_2 = (0.7217, 0.6921)^T$
+
+
+\end{document}
