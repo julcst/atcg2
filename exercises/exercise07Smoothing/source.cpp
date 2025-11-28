@@ -58,7 +58,7 @@ public:
     Exercise07Layer(const std::string& name) : atcg::Layer(name) {}
 
     template<typename T, class LaplaceCalculator>
-    void taubin_smoothing(const std::shared_ptr<atcg::Mesh>& mesh, LaplaceCalculator calculator)
+    void taubin_smoothing(const std::shared_ptr<atcg::Mesh>& mesh, LaplaceCalculator calculator, const uint32_t iterations = 1)
     {
         atcg::Laplacian<T> laplacian = calculator.calculate(mesh);
         /// Exercise: - Calculate the Taubin operator
@@ -77,8 +77,10 @@ public:
         }
 
         /// Exercise: Implement taubin update step
-        v += lambda * L * v;
-        v += mu * L * v;
+        for (uint32_t it = 0; it < iterations; ++it) { // Only loop this to be faster because uniform laplace L does not change
+            v += lambda * L * v;
+            v += mu * L * v;
+        }
         // 
 
         // Convert Eigen matrix to OpenMesh
@@ -154,15 +156,15 @@ public:
 
             if(ImGui::Button("Iteration step"))
             {
-                for(int i = 0; i < num_iterations_per_step; ++i)
+                for(int i = 0; i < 1; ++i)
                 {
-                    taubin_smoothing<float, LaplaceUniform<float>>(mesh, LaplaceUniform<float>());
+                    taubin_smoothing<float, LaplaceUniform<float>>(mesh, LaplaceUniform<float>(), num_iterations_per_step);
                 }
                 iterations += num_iterations_per_step;
             }
 
             ImGui::InputInt("Iterations per step", &num_iterations_per_step);
-            ImGui::Text(("Iterations: " + std::to_string(iterations)).c_str());
+            ImGui::Text("Iterations: %i", iterations);
 
             if(show_smoothed)
             {
