@@ -35,10 +35,12 @@ struct LaplaceUniform
         ///           - Calculate the weights for the M matrix
         for (const auto vertex : mesh->all_vertices()) {
             const auto i = vertex.idx();
-            vertex_weights.emplace_back(i, i, -vertex.valence());
+            const auto valence = static_cast<T>(vertex.valence());
+            vertex_weights.emplace_back(i, i, valence);
+            edge_weights.emplace_back(i, i, -valence);
             for (const auto neighbor : vertex.vertices()) {
                 const auto j = neighbor.idx();
-                edge_weights.emplace_back(i, j, 1);
+                edge_weights.emplace_back(i, j, static_cast<T>(1));
             }
         }
         laplace.S.setFromTriplets(edge_weights.begin(), edge_weights.end());
@@ -75,8 +77,8 @@ public:
         }
 
         /// Exercise: Implement taubin update step
-        v += mu * L * v;
         v += lambda * L * v;
+        v += mu * L * v;
         // 
 
         // Convert Eigen matrix to OpenMesh
