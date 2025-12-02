@@ -36,6 +36,13 @@ Sign of the divergence for the given vector fields (assuming we are looking at t
 
 \subsection*{b)}
 
+\begin{align*}
+	\laplacian \left(\laplacian f\right) &= \laplacian \left( \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial y^2}\right)\\
+	&= \frac{\partial^2}{\partial x^2} \left( \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial y^2}\right) + \frac{\partial^2}{\partial y^2} \left( \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial y^2}\right)\\
+	&= \frac{\partial^4 f}{\partial x^4} + \frac{\partial^4 f}{\partial x^2 \partial y^2} + \frac{\partial^4 f}{\partial y^2 \partial x^2} + \frac{\partial^4 f}{\partial y^4}\\
+	&= \frac{\partial^4 f}{\partial x^4} + \frac{\partial^4 f}{\partial y^4} + 2 \frac{\partial^4 f}{\partial x^2 \partial y^2}
+\end{align*}
+
 \subsection*{c)}
 
 \end{document}
