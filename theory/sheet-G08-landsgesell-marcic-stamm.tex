@@ -23,6 +23,36 @@ Sign of the divergence for the given vector fields (assuming we are looking at t
 
 \subsection*{Assignment 3}
 
+\begin{align*}
+	\gradient  \rho(\vecarrow{x}) = \begin{pmatrix}
+		-2x \exp(-x^2-y^2)\\
+		-2y \exp(-x^2-y^2)
+	\end{pmatrix}
+\end{align*}
+
+\begin{align*}
+	\vecarrow{f} = \begin{pmatrix}
+		2 \lambda x \exp(-x^2-y^2)\\
+		2 \lambda y \exp(-x^2-y^2)
+	\end{pmatrix}
+\end{align*}
+
+\begin{align*}
+	\divergence \vecarrow{f} &= \frac{\partial f_x}{\partial x} + \frac{\partial f_y}{\partial y}\\
+	&= \frac{\partial}{\partial x} 2 \lambda x \exp(-x^2-y^2) + \frac{\partial}{\partial y} 2 \lambda y \exp(-x^2-y^2)\\
+	&= 2 \lambda \exp(-x^2-y^2) (1 - 2x^2) + 2 \lambda \exp(-x^2-y^2) (1 - 2y^2)\\
+	&= 4 \lambda \exp(-x^2-y^2) (1 - x^2 - y^2)
+\end{align*}
+
+\bigskip
+\noindent
+Divergence at $\vecarrow{x} = (0,0)^T$:
+\begin{align*}
+	\divergence \vecarrow{f}(0,0) &= 4 \lambda \exp(-0^2-0^2) (1 - 0^2 - 0^2) = 4 \lambda
+\end{align*}
+
+Assuming $\lambda > 0$, the divergence at $\vecarrow{x} = (0,0)^T$ is positive, therefore the temperature field has a heat source at this point.
+
 \subsection*{Assignment 4}
 
 \subsection*{a)}
