@@ -48,8 +48,7 @@ struct LaplaceCotan
         /// Exercise: - Compute the edge weights using cotan weights
         ///           - Remember to check for boundary edges and handle them accordingly
         ///           - Set M = |diagonal(S)|
-        for (const auto v : mesh->all_vertices())
-        {
+        for (const auto v : mesh->all_vertices()) {
             const auto i = v.idx();
             T sum = 0;
             for (const auto out : v.outgoing_halfedges()) {
@@ -66,7 +65,15 @@ struct LaplaceCotan
                 const T cotana = triangleCotan(vprev, vcurr, vcent);
                 const T cotanb = triangleCotan(vnext, vcurr, vcent);
 
-                const T weight = (cotana + cotanb) / 2;
+                T weight = 0;
+                if (!out.opp().is_boundary()) {  // left triangle exists
+                    weight += cotana;
+                }
+                if (!out.is_boundary()) { // right triangle exists
+                    weight += cotanb;
+                }
+                weight *= T(0.5);
+
                 edge_weights.emplace_back(i, j, weight);
                 sum += weight;
             }
@@ -163,7 +170,7 @@ public:
             for (int step = 0; step < steps_large; ++step) {
                 u_explicit_large += delta_large * L * u_explicit_large;
             }
-            // 
+            // Produces wrong result because explicit euler is numerically unstable for large steps
 
             std::cout << "Time: " << timer.elapsedSeconds() << "s\n";
         }
@@ -175,7 +182,7 @@ public:
             for (int step = 0; step < steps_small; ++step) {
                 u_explicit_small += delta_small * L * u_explicit_small;
             }
-            // 
+            // Correct result but slow because of many steps
 
             std::cout << "Time: " << timer.elapsedSeconds() << "s\n";
         }
@@ -188,10 +195,13 @@ public:
 
             /// Exercise: Compute implicit euler with large steps
             ///           You can use Eigen::SparseLU<...> to compute the LU decompostion of L
-
-            // 
-
+            Eigen::SparseLU<Eigen::SparseMatrix<double>> lu;
+            lu.compute(identity - delta_large * L);
+            for (int step = 0; step < steps_large; ++step) {
+                u_implict_large = lu.solve(u_implict_large);
+            }
             std::cout << "Time: " << timer.elapsedSeconds() << "s\n";
+            // Correct result and faster, larger steps possible because of numerical stability
         }
 
         color_mesh(mesh_explicit_large, u_explicit_large);
