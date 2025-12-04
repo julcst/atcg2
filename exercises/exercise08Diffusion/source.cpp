@@ -31,9 +31,12 @@ struct LaplaceCotan
         ///           - You can use atcg::areaFromMetric<T> to compute the triangle area
         ///           - Use clampCotan for numerical stability
         ///           - Handle cases where the area is close to 0
-
+        const auto edge0 = v1 - v0;
+        const auto edge1 = v2 - v0;
+        const auto edge2 = v2 - v1;
+        const auto cotan = dot(edge0, edge1) / (2 * atcg::areaFromMetric<T>(edge0.length(), edge1.length(), edge2.length()));
         // 
-        return T(1e-5);
+        return clampCotan(cotan);
     }
 
     atcg::Laplacian<T> calculate(const std::shared_ptr<atcg::Mesh>& mesh)
@@ -45,7 +48,35 @@ struct LaplaceCotan
         /// Exercise: - Compute the edge weights using cotan weights
         ///           - Remember to check for boundary edges and handle them accordingly
         ///           - Set M = |diagonal(S)|
+        for (const auto v : mesh->all_vertices())
+        {
+            const auto i = v.idx();
+            T sum = 0;
+            for (const auto out : v.outgoing_halfedges()) {
+                // TODO: Boundary
+                if(out.is_boundary()) {
+                    continue;
+                }
+                const auto j = out.to().idx();
+                const auto vcent = mesh->point(v);
+                const auto vprev = mesh->point(out.opp().prev().from());
+                const auto vcurr = mesh->point(out.to());
+                const auto vnext = mesh->point(out.next().to());
 
+                const T cotana = triangleCotan(vprev, vcurr, vcent);
+                const T cotanb = triangleCotan(vnext, vcurr, vcent);
+
+                const T weight = (cotana + cotanb) / 2;
+                edge_weights.emplace_back(i, j, weight);
+                sum += weight;
+            }
+            edge_weights.emplace_back(i, i, -sum);
+        }
+        laplace.S.resize(N, N);
+        laplace.M.resize(N, N);
+        laplace.S.setFromTriplets(edge_weights.begin(), edge_weights.end());
+        laplace.M.setIdentity();
+        laplace.M.diagonal() = laplace.S.diagonal().cwiseAbs();
         // 
 
         return laplace;
@@ -129,6 +160,9 @@ public:
             atcg::Timer timer;
 
             /// Exercise: Compute explicit euler with large steps
+            for (int step = 0; step < steps_large; ++step) {
+                u_explicit_large += delta_large * L * u_explicit_large;
+            }
             // 
 
             std::cout << "Time: " << timer.elapsedSeconds() << "s\n";
@@ -137,7 +171,10 @@ public:
         {
             atcg::Timer timer;
 
-            /// Exercise: Compute explicit euler with large steps
+            /// Exercise: Compute explicit euler with small steps
+            for (int step = 0; step < steps_small; ++step) {
+                u_explicit_small += delta_small * L * u_explicit_small;
+            }
             // 
 
             std::cout << "Time: " << timer.elapsedSeconds() << "s\n";
