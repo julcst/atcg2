@@ -58,7 +58,7 @@ struct LaplaceCotan
                 }
                 const auto j = out.to().idx();
                 const auto vcent = mesh->point(v);
-                const auto vprev = mesh->point(out.opp().prev().from());
+                const auto vprev = mesh->point(out.opp().next().to());
                 const auto vcurr = mesh->point(out.to());
                 const auto vnext = mesh->point(out.next().to());
 
