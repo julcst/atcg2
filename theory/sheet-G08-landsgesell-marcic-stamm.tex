@@ -21,7 +21,22 @@ Sign of the divergence for the given vector fields (assuming we are looking at t
 	\item Right: $\divergence \vecarrow{f} = 0$ as $\frac{\partial f}{\partial x} = 0$ and $\frac{\partial f}{\partial x} = 0$, no compression or expansion, the same amount flowing "in" and "out".
 \end{itemize}
 
+\newpage
 \subsection*{Assignment 3}
+
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{imgs/tempfield.png}
+		\caption{Plot of the Temperature Field. Colors indicate temperature.}
+	\end{subfigure}
+	\begin{subfigure}{1\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{imgs/gradtempfield.png}
+		\caption{Plot of Gradient of the Temperature Field. Colors indicate spatially temperature change.}
+	\end{subfigure}
+\end{figure}
 
 \begin{align*}
 	\gradient  \rho(\vecarrow{x}) = \begin{pmatrix}
@@ -53,6 +68,15 @@ Divergence at $\vecarrow{x} = (0,0)^T$:
 
 Assuming $\lambda > 0$, the divergence at $\vecarrow{x} = (0,0)^T$ is positive, therefore the temperature field has a heat source at this point.
 
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}{1\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{imgs/flux_divergence.png}
+		\caption{Plot of Flux and Divergence of the Temperature Field.´}
+	\end{subfigure}
+\end{figure}
+
 \subsection*{Assignment 4}
 
 \subsection*{a)}
@@ -74,5 +98,45 @@ Assuming $\lambda > 0$, the divergence at $\vecarrow{x} = (0,0)^T$ is positive, 
 \end{align*}
 
 \subsection*{c)}
+If $f$ minimizes $E$ subject to the boundary conditions, then the directional derivatives $\frac{d}{d\epsilon}E\left[f+\epsilon h\right]\Bigg|_{\epsilon=0} = 0$ for all admissible perturbations $h$.
 
+\begin{align*}
+	&E\left[f+\epsilon h\right] = \frac{1}{2} \int \int_{R^2} \left(\frac{\partial^2(f+\epsilon h)}{\partial x^2}\right)^2 + 2\left(\frac{\partial^2(f+\epsilon h)}{\partial x \partial y}\right)^2 + \left(\frac{\partial^2(f+\epsilon h)}{\partial y^2}\right)^2 \, dx\, dy\\
+	&= \frac{1}{2} \int \int_{R^2} \left(\frac{\partial^2(f^2 + 2f\epsilon h + \epsilon^2 h^2)}{\partial x^2}\right) + 2\left(\frac{\partial^2(f^2 + 2f\epsilon h + \epsilon^2 h^2)}{\partial x \partial y}\right) + \left(\frac{\partial^2(f^2 + 2f\epsilon h + \epsilon^2 h^2)}{\partial y^2}\right) \, dx\, dy\\
+\end{align*}
+
+Differentiating with respect to $\epsilon$:
+\begin{align*}
+	\frac{d}{d\epsilon}E\left[f+\epsilon h\right] = \frac{1}{2} \int \int_{R^2} \left(\frac{\partial^2(2f h + 2\epsilon h^2)}{\partial x^2}\right) + 2\left(\frac{\partial^2(2f h + 2\epsilon h^2)}{\partial x \partial y}\right) + \left(\frac{\partial^2(2f h + 2\epsilon h^2)}{\partial y^2}\right) \, dx\, dy
+\end{align*}
+\begin{align*}
+	\implies \frac{d}{d\epsilon}E\left[f+\epsilon h\right]\Bigg|_{\epsilon=0} &= \int \int_{R^2} \left(\frac{\partial^2(f h)}{\partial x^2}\right) + 2\left(\frac{\partial^2(f h)}{\partial x \partial y}\right) + \left(\frac{\partial^2(f h)}{\partial y^2}\right) \, dx\, dy\\
+	&= \underbrace{\int \int_{R^2} \left(\frac{\partial^2(f h)}{\partial x^2}\right) \, dx\, dy}_{\text{Term 1}} + 2\underbrace{\int \int_{R^2} \left(\frac{\partial^2(f h)}{\partial x \partial y}\right) \, dx\, dy}_{\text{Term 2}} + \underbrace{\int \int_{R^2} \left(\frac{\partial^2(f h)}{\partial y^2}\right) \, dx\, dy}_{\text{Term 3}}\\
+\end{align*}
+Let us first consider Term 1 and let's apply Green’s first idendity twice:
+\begin{align*}
+	\text{Term 1} &= \int \int_{R^2} \frac{\partial^2 f}{\partial x^2} \frac{\partial^2 h}{\partial x^2} \, dx\, dy\\
+	&= \underbrace{\int \int_{\partial R^2} \frac{\partial h}{\partial x} \left (\frac{\partial^2 f}{\partial x^2} \boldsymbol{\cdot} \tilde{v}\right ) \, dx\, dy}_{0 \text{ due to } \partial R^2 = \emptyset} - \int \int_{R^2} \frac{\partial^3 f}{\partial x^3} \frac{\partial h}{\partial x} \, dx\, dy\\
+	- \int \int_{R^2} \frac{\partial^3 f}{\partial x^3} \frac{\partial h}{\partial x} \, dx\, dy &= -\underbrace{\int \int_{\partial R^2} h \left (\frac{\partial^3 f}{\partial x^3} \boldsymbol{\cdot} \tilde{v}\right ) \, dx\, dy}_{0 \text{ due to } \partial R^2 = \emptyset} + \int \int_{R^2} \frac{\partial^4 f}{\partial x^4} h \, dx\, dy
+\end{align*}
+So we end up with:
+\begin{align*}
+	\int \int_{R^2} \frac{\partial^2 f}{\partial x^2} \frac{\partial^2 h}{\partial x^2} \, dx\, dy = \int \int_{R^2} \frac{\partial^4 f}{\partial x^4} h \, dx\, dy
+\end{align*}
+Applying the same steps to Term 3 yields:
+\begin{align*}
+	\int \int_{R^2} \frac{\partial^2 f}{\partial y^2} \frac{\partial^2 h}{\partial y^2} \, dx\, dy = \int \int_{R^2} \frac{\partial^4 f}{\partial y^4} h \, dx\, dy
+\end{align*}
+And for Term 2 we get:
+\begin{align*}
+	2\int \int_{R^2} \frac{\partial^2 f}{\partial x \partial y} \frac{\partial^2 h}{\partial x \partial y} \, dx\, dy = 2\int \int_{R^2} \frac{\partial^4 f}{\partial x^2 \partial y^2} h \, dx\, dy
+\end{align*}
+Now let's put everything together again:
+\begin{align*}
+	\frac{d}{d\epsilon}E\left[f+\epsilon h\right] &= \int \int_{R^2} \left(\frac{\partial^2(f h)}{\partial x^2}\right) \, dx\, dy + 2\int \int_{R^2} \left(\frac{\partial^2(f h)}{\partial x \partial y}\right) \, dx\, dy + \int \int_{R^2} \left(\frac{\partial^2(f h)}{\partial y^2}\right) \, dx\, dy\\
+	&= \int \int_{R^2} \underbrace{\left(\frac{\partial^4 f}{\partial x^4} + 2 \frac{\partial^4 f}{\partial x^2 \partial y^2} + \frac{\partial^4 f}{\partial y^4} \right)}_{\Delta^2 f \text{ we know that from b)}} h \, dx\, dy\\
+	&= \int \int_{R^2} (\Delta^2 f) \, h \, dx\, dy
+\end{align*}
+Since $\frac{d}{d\epsilon}E\left[f+\epsilon h\right]\Bigg|_{\epsilon=0} = 0$ for all admissible perturbations $h$, f minimizes E.\\
+It follows that $\Delta^2 f = 0$, because h is arbitrary. $\square$
 \end{document}
