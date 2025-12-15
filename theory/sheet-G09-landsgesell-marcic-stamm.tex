@@ -1,0 +1,46 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{bigints}
+\input{macros}
+
+\usepackage[top=2cm, bottom=2cm, left=2.5cm, right=2.5cm]{geometry}
+
+\begin{document}
+
+\section*{Sheet G09 - Differential Forms}
+Robin Landsgesell, Jonas Marcic, Julian Stamm
+
+\subsection*{Assignment 1)}
+\subsubsection*{a)}
+\begin{align*}
+	(av_p + bw_p)[f] &= \sum_{i=1}^3 (av^i + bw^i) \frac{\partial f}{\partial x^i}\\
+	&= \sum_{i=1}^3 \left( a v^i \frac{\partial f}{\partial x^i} + b w^i \frac{\partial f}{\partial x^i} \right)\\
+	&= \sum_{i=1}^3 \left( a v^i \frac{\partial f}{\partial x^i} \right) + \sum_{i=1}^3 \left( b w^i \frac{\partial f}{\partial x^i} \right)\\
+	&= a \sum_{i=1}^3 v^i \frac{\partial f}{\partial x^i} + b \sum_{i=1}^3 w^i \frac{\partial f}{\partial x^i}\\
+	&= a v_p[f] + b w_p[f]
+\end{align*}
+
+\subsubsection*{b)}
+\begin{align*}
+	v_p[af + bg] &= \sum_{i=1}^3 v^i \frac{\partial}{\partial x^i} (af + bg)\\
+	&= \sum_{i=1}^3 v^i \left( a \frac{\partial f}{\partial x^i} + b \frac{\partial g}{\partial x^i} \right)\\
+	&= \sum_{i=1}^3 \left( a v^i \frac{\partial f}{\partial x^i} + b v^i \frac{\partial g}{\partial x^i} \right)\\
+	&= a \sum_{i=1}^3 v^i \frac{\partial f}{\partial x^i} + b \sum_{i=1}^3 v^i \frac{\partial g}{\partial x^i}\\
+	&= a v_p[f] + b v_p[g]
+\end{align*}
+
+\subsubsection*{c)}
+\begin{align*}
+	v_p[fg] &= \sum_{i=1}^3 v^i \frac{\partial}{\partial x^i} (fg)\\
+	&= \sum_{i=1}^3 v^i \left( \frac{\partial f}{\partial x^i} g(p) + f(p) \frac{\partial g}{\partial x^i} \right)\\
+	&= \sum_{i=1}^3 \left( v^i \frac{\partial f}{\partial x^i} g(p) + v^i f(p) \frac{\partial g}{\partial x^i} \right)\\
+	&= \sum_{i=1}^3 \left( v^i \frac{\partial f}{\partial x^i} g(p) \right) + \sum_{i=1}^3 \left( v^i f(p) \frac{\partial g}{\partial x^i} \right)\\
+	&= \left( \sum_{i=1}^3 v^i \frac{\partial f}{\partial x^i} \right) g(p) + f(p) \left( \sum_{i=1}^3 v^i \frac{\partial g}{\partial x^i} \right)\\
+	&= v_p[f]g(p) + f(p)v_p[g]
+\end{align*}
+
+\end{document}
