@@ -67,8 +67,21 @@ Robin Landsgesell, Jonas Marcic, Julian Stamm
 
 \subsubsection*{b)}
 
-\includegraphics[width=0.7\textwidth]{imgs/wedge_1.png}
+\includegraphics[width=0.7\textwidth]{imgs/wedge_1.png}\\
+\noindent
+$dx_1 \wedge dx_2(v, w)$ represents the same projected area as $dx_2 \wedge dx_1(v, w)$, but with opposite orientation. $dx_1 \wedge dx_1(v, w)$ and $dx_2 \wedge dx_2(v, w)$ correspond to an area of zero are therefore not visible in the plot.
 
-Geometrically, $dx_1 \wedge dx_2(v, w)$ represents the same projected area as $dx_2 \wedge dx_1(v, w)$, but with opposite orientation. $dx_1 \wedge dx_1(v, w)$ and $dx_2 \wedge dx_2(v, w)$ have an area of zero are therefore not visible in the plot.
+\subsubsection*{c)}
+
+\begin{align*}
+	\alpha \wedge \beta &= (3dx - 7dy) \wedge (2dx + dz)\\
+	&= (3dx \wedge 2dx) + (3dx \wedge dz) + (-7dy \wedge 2dx) + (-7dy \wedge dz)\\
+	&= 6(\underbrace{dx \wedge dx}_{= 0}) + 3(dx \wedge dz) - 14(\underbrace{dy \wedge dx}_{= -dx \wedge dy}) - 7(dy \wedge dz)\\
+	&= 14(dx \wedge dy) + 3(dx \wedge dz) - 7(dy \wedge dz)
+\end{align*}
+
+\subsubsection*{d)}
+
+Basis for $\bigwedge^3(\mathbb{R}^4)$: $\{dx^1 \wedge dx^2 \wedge dx^3, dx^1 \wedge dx^2 \wedge dx^4, dx^1 \wedge dx^3 \wedge dx^4, dx^2 \wedge dx^3 \wedge dx^4\}$
 
 \end{document}
