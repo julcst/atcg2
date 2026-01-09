@@ -1,0 +1,109 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{bigints}
+\input{macros}
+
+\usepackage[top=2cm, bottom=2cm, left=2.5cm, right=2.5cm]{geometry}
+
+\begin{document}
+
+\section*{Sheet G09 - Differential Forms}
+Robin Landsgesell, Jonas Marcic, Julian Stamm
+
+\subsection*{Assignment 1)}
+\subsubsection*{a)}
+\begin{align*}
+	(av_p + bw_p)[f] &= \sum_{i=1}^3 (av^i + bw^i) \frac{\partial f}{\partial x^i}\\
+	&= \sum_{i=1}^3 \left( a v^i \frac{\partial f}{\partial x^i} + b w^i \frac{\partial f}{\partial x^i} \right)\\
+	&= \sum_{i=1}^3 \left( a v^i \frac{\partial f}{\partial x^i} \right) + \sum_{i=1}^3 \left( b w^i \frac{\partial f}{\partial x^i} \right)\\
+	&= a \sum_{i=1}^3 v^i \frac{\partial f}{\partial x^i} + b \sum_{i=1}^3 w^i \frac{\partial f}{\partial x^i}\\
+	&= a v_p[f] + b w_p[f]
+\end{align*}
+
+\subsubsection*{b)}
+\begin{align*}
+	v_p[af + bg] &= \sum_{i=1}^3 v^i \frac{\partial}{\partial x^i} (af + bg)\\
+	&= \sum_{i=1}^3 v^i \left( a \frac{\partial f}{\partial x^i} + b \frac{\partial g}{\partial x^i} \right)\\
+	&= \sum_{i=1}^3 \left( a v^i \frac{\partial f}{\partial x^i} + b v^i \frac{\partial g}{\partial x^i} \right)\\
+	&= a \sum_{i=1}^3 v^i \frac{\partial f}{\partial x^i} + b \sum_{i=1}^3 v^i \frac{\partial g}{\partial x^i}\\
+	&= a v_p[f] + b v_p[g]
+\end{align*}
+
+\subsubsection*{c)}
+\begin{align*}
+	v_p[fg] &= \sum_{i=1}^3 v^i \frac{\partial}{\partial x^i} (fg)\\
+	&= \sum_{i=1}^3 v^i \left( \frac{\partial f}{\partial x^i} g(p) + f(p) \frac{\partial g}{\partial x^i} \right)\\
+	&= \sum_{i=1}^3 \left( v^i \frac{\partial f}{\partial x^i} g(p) + v^i f(p) \frac{\partial g}{\partial x^i} \right)\\
+	&= \sum_{i=1}^3 \left( v^i \frac{\partial f}{\partial x^i} g(p) \right) + \sum_{i=1}^3 \left( v^i f(p) \frac{\partial g}{\partial x^i} \right)\\
+	&= \left( \sum_{i=1}^3 v^i \frac{\partial f}{\partial x^i} \right) g(p) + f(p) \left( \sum_{i=1}^3 v^i \frac{\partial g}{\partial x^i} \right)\\
+	&= v_p[f]g(p) + f(p)v_p[g]
+\end{align*}
+
+\subsection*{Assignment 2)}
+\subsubsection*{a)}
+\begin{align*}
+	dx^1(v) &= \mathrm{d}x^1(v) = \mathrm{d}x^1 \left( -1\frac{\partial}{\partial x^1} + 3\frac{\partial}{\partial x^2} - 4\frac{\partial}{\partial x^3} \right)\\
+	&= -1 \cdot \mathrm{d}x^1\left(\frac{\partial}{\partial x^1}\right) + 3 \cdot \mathrm{d}x^1\left(\frac{\partial}{\partial x^2}\right) - 4 \cdot \mathrm{d}x^1\left(\frac{\partial}{\partial x^3}\right) = -1\\
+	dx^2(v) &= 3\\ 
+	dx^3(v) &= -4\\ 
+\end{align*}
+
+\subsubsection*{b)}
+\begin{align*}
+	\left(2dx^1 - 3dx^2 + 5dx^3\right)(v) &= 2dx^1(v) - 3dx^2(v) + 5dx^3(v)\\
+	&= 2 \cdot (-1) - 3 \cdot 3 + 5 \cdot (-4)\\
+	&= -31
+\end{align*}
+
+\subsubsection*{c)}
+\begin{align*}
+	&\phi_p = f(1,2,3)dx + g(1,2,3)dy + h(1,2,3)dz = 2dx + 6.5dy + 6dz\\
+	&\phi_p(v_p) = 2 \cdot 2 + 6.5 \cdot (-1) + 6 \cdot (-2) = -14.5
+\end{align*}
+
+\subsection*{Assignment 3)}
+\subsubsection*{a)}
+
+\begin{align*}
+	dx_1 \wedge dx_2(v, w) &= \begin{vmatrix} dx^1(v) & dx^1(w) \\ dx^2(v) & dx^2(w) \end{vmatrix}\\
+	&= \begin{vmatrix} 1 & 4 \\ 2 & 5 \end{vmatrix}\\
+	&= 1 \cdot 5 - 2 \cdot 4\\
+	&= -3
+\end{align*}
+
+\begin{align*}
+	dx_2 \wedge dx_1(v, w) &= \begin{vmatrix} 2 & 5 \\ 1 & 4 \end{vmatrix} = 3
+\end{align*}
+
+\begin{align*}
+	dx_1 \wedge dx_1(v, w) &= \begin{vmatrix} 1 & 4 \\ 1 & 4 \end{vmatrix} = 0
+\end{align*}
+
+\begin{align*}
+	dx_2 \wedge dx_2(v, w) &= \begin{vmatrix} 2 & 5 \\ 2 & 5 \end{vmatrix} = 0
+\end{align*}
+
+\subsubsection*{b)}
+
+\includegraphics[width=0.7\textwidth]{imgs/wedge_1.png}\\
+\noindent
+$dx_1 \wedge dx_2(v, w)$ represents the same projected area as $dx_2 \wedge dx_1(v, w)$, but with opposite orientation. $dx_1 \wedge dx_1(v, w)$ and $dx_2 \wedge dx_2(v, w)$ correspond to an area of zero are therefore not visible in the plot.
+
+\subsubsection*{c)}
+
+\begin{align*}
+	\alpha \wedge \beta &= (3dx - 7dy) \wedge (2dx + dz)\\
+	&= (3dx \wedge 2dx) + (3dx \wedge dz) + (-7dy \wedge 2dx) + (-7dy \wedge dz)\\
+	&= 6(\underbrace{dx \wedge dx}_{= 0}) + 3(dx \wedge dz) - 14(\underbrace{dy \wedge dx}_{= -dx \wedge dy}) - 7(dy \wedge dz)\\
+	&= 14(dx \wedge dy) + 3(dx \wedge dz) - 7(dy \wedge dz)
+\end{align*}
+
+\subsubsection*{d)}
+
+Basis for $\bigwedge^3(\mathbb{R}^4)$: $\{dx^1 \wedge dx^2 \wedge dx^3, dx^1 \wedge dx^2 \wedge dx^4, dx^1 \wedge dx^3 \wedge dx^4, dx^2 \wedge dx^3 \wedge dx^4\}$
+
+\end{document}
