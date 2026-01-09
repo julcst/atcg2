@@ -1,0 +1,196 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{bigints}
+\input{macros}
+\begin{document}
+
+\section*{Sheet G08 - Diffusion}
+Robin Landsgesell, Jonas Marcic, Julian Stamm
+
+\subsection*{Assignment 2}
+\begin{align*}
+	\gradient_Gf &= (df)^\sharp\\
+	&= \left(\sum_{i=1}^n \frac{\partial f}{\partial x^i} dx^i\right)^\sharp\\
+	&= \sum_{i=1}^n\sum_{j=1}^n g^{ij} \frac{\partial f}{\partial x^j} \frac{\partial}{\partial x^i}\\
+\end{align*}
+
+\subsection*{Assignment 3}
+
+\subsubsection*{a)}
+\begin{equation*}
+	\frac{\partial S}{\partial r} = \begin{pmatrix}
+		\cos(\varphi)\\
+		\sin(\varphi)	
+		\end{pmatrix},\quad
+	\frac{\partial S}{\partial \varphi} = \begin{pmatrix}
+		-r\sin(\varphi)\\
+		r\cos(\varphi)	
+		\end{pmatrix}
+\end{equation*}\\
+\begin{align*}
+	g_{ij} &= \left\langle \frac{\partial S}{\partial x^i}, \frac{\partial S}{\partial x^j} \right\rangle\\
+	g_{rr} &= \cos^2\varphi + \sin^2\varphi = 1\\
+	g_{r\varphi} &= -r\cos\varphi\sin\varphi + r\sin\varphi\cos\varphi = 0\\
+	g_{\varphi r} &= g_{r\varphi} = 0\\
+	g_{\varphi \varphi} &= r^2\sin^2\varphi + r^2\cos^2\varphi = r^2\\
+	\\
+	G &= \begin{pmatrix}
+		g_{rr} & g_{r\varphi}\\
+		g_{\varphi r} & g_{\varphi \varphi}
+		\end{pmatrix} = \begin{pmatrix}
+		1 & 0\\
+		0 & r^2
+		\end{pmatrix}
+\end{align*}
+
+\newpage
+\subsubsection*{b)}
+\begin{center}
+	$\boxed{\star dr}$\\
+	\vspace{1em}
+	Let $\star dr$ be of form $\star dr = a dr + b d\varphi$. For an arbitrary $\beta$ we get:
+\end{center}
+
+\begin{align*}
+	\text{Compute LHS:}\\
+	dr \wedge \beta &= \left\langle \star dr, \beta \right\rangle_\wedge dA\\
+	dr \wedge (b_1dr+b_2d\varphi) &= \left\langle \star dr, \beta \right\rangle_\wedge dA\\
+	b_2 dr \wedge d\varphi &= \left\langle \star dr, \beta \right\rangle_\wedge dA\\
+	\text{Compute RHS:}\\
+	b_2 dr \wedge d\varphi &= det(\left\langle \star dr, \beta \right\rangle_{G^{-1}}) dA\\
+	b_2 dr \wedge d\varphi &= \begin{pmatrix}
+								a\\
+								b	
+							  \end{pmatrix}^T\cdot G^{-1}\cdot \begin{pmatrix}
+								b_1\\
+								b_2	
+								\end{pmatrix}dA\\
+	b_2 dr \wedge d\varphi &= (ab_1 + \frac{1}{r^2}bb_2) \cdot dA\\
+	\text{Plugin dA:}\\
+	b_2 dr \wedge d\varphi &= (ab_1 + \frac{1}{r^2}bb_2) \cdot \sqrt{det G} \, dr \wedge d\varphi\\
+	b_2 dr \wedge d\varphi &= (ab_1 + \frac{1}{r^2}bb_2) \cdot r dr \wedge d\varphi\\
+	b_2 dr \wedge d\varphi &= (ab_1r + \frac{1}{r}bb_2)\, dr \wedge d\varphi\\
+\end{align*}
+\begin{center}
+	We can conclude that:
+\end{center}
+\begin{equation*}
+	\Rightarrow \begin{cases}
+		ab_1r = 0\\
+		\frac{1}{r}bb_2 = b_2
+	\end{cases} \Rightarrow \begin{cases}
+		a = 0\\
+		b = r
+	\end{cases} \Rightarrow \boxed{\star dr = r d\varphi}
+\end{equation*}
+
+\newpage
+\begin{center}
+	$\boxed{\star d\varphi}$\\
+	\vspace{1em}
+	Let $\star d\varphi$ be of form $\star d\varphi = a dr + b d\varphi$. For an arbitrary $\beta$ we get:
+\end{center}
+
+\begin{align*}
+	\text{Compute LHS:}\\
+	d\varphi \wedge \beta &= \left\langle \star d\varphi, \beta \right\rangle_\wedge dA\\
+	d\varphi \wedge (b_1dr+b_2d\varphi) &= \left\langle \star d\varphi, \beta \right\rangle_\wedge dA\\
+	b_1 d\varphi \wedge dr &= \left\langle \star d\varphi, \beta \right\rangle_\wedge dA\\
+	\text{Compute RHS:}\\
+	-b_1 dr \wedge d\varphi &= det(\left\langle \star d\varphi, \beta \right\rangle_{G^{-1}}) dA\\
+	-b_1 dr \wedge d\varphi &= \begin{pmatrix}
+								a\\
+								b	
+							  \end{pmatrix}^T\cdot G^{-1}\cdot \begin{pmatrix}
+								b_1\\
+								b_2	
+								\end{pmatrix}dA\\
+	-b_1 dr \wedge d\varphi &= (ab_1 + \frac{1}{r^2}bb_2) \cdot dA\\
+	\text{Plugin dA:}\\
+	-b_1 dr \wedge d\varphi &= (ab_1 + \frac{1}{r^2}bb_2) \cdot \sqrt{det G} \, dr \wedge d\varphi\\
+	-b_1 dr \wedge d\varphi &= (ab_1 + \frac{1}{r^2}bb_2) \cdot r dr \wedge d\varphi\\
+	-b_1 dr \wedge d\varphi &= (ab_1r + \frac{1}{r}bb_2)\, dr \wedge d\varphi\\
+\end{align*}
+\begin{center}
+	We can conclude that:
+\end{center}
+\begin{equation*}
+	\Rightarrow \begin{cases}
+		ab_1r = -b_1\\
+		\frac{1}{r}bb_2 = 0
+	\end{cases} \Rightarrow \begin{cases}
+		a = -\frac{1}{r}\\
+		b = 0
+	\end{cases} \Rightarrow \boxed{\star d\varphi = -\frac{1}{r} dr}
+\end{equation*}
+
+\newpage
+\begin{center}
+	$\boxed{\star (dr \wedge d\varphi)}$\\
+	\vspace{1em}
+	Let $\star (dr \wedge d\varphi)$ be of form $\star (dr \wedge d\varphi) = c$. Because $(dr \wedge d\varphi)$ is a 2-form, so $\star(dr \wedge d\varphi)$ has to be a 0-form. Let $\beta = (b_1dr + b_2 d\varphi + b_3)$ and
+	$G^{-1} = \begin{pmatrix}
+		1 & 0 & 0\\
+		0 & \frac{1}{r^2} & 0\\
+		0 & 0 & 1
+		\end{pmatrix}$:
+\end{center}
+\begin{align*}
+	(dr \wedge d\varphi) \wedge \beta &= \left\langle \star (dr \wedge d\varphi), \beta \right\rangle_\wedge dA\\
+	(dr \wedge d\varphi) \wedge (b_1dr+b_2d\varphi + b_3) &= \left\langle \star (dr \wedge d\varphi), \beta \right\rangle_\wedge dA\\
+	b_3\, dr \wedge d\varphi &= \left\langle c, \beta \right\rangle_\wedge dA\\
+	b_3\, dr \wedge d\varphi &= det(\left\langle c, \beta \right\rangle_{G^{-1}}) dA\\
+	b_3\, dr \wedge d\varphi &= \begin{pmatrix}
+								0\\
+								0\\
+								c	
+							  \end{pmatrix}^T\cdot G^{-1}\cdot \begin{pmatrix}
+								b_1\\
+								b_2\\
+								b_3
+								\end{pmatrix}dA\\
+	b_3\, dr \wedge d\varphi &= c \cdot b_3 \cdot dA\\
+	b_3\, dr \wedge d\varphi &= c \cdot b_3 \sqrt{det G} \, dr \wedge d\varphi\\
+	b_3\, dr \wedge d\varphi &= c \cdot b_3 r\, dr \wedge d\varphi\\
+\end{align*}
+\begin{center}
+	We can conclude that:
+\end{center}
+\begin{equation*}
+	\Rightarrow c \cdot b_3 r = b_3 \Rightarrow c = \frac{1}{r} \Rightarrow \boxed{\star (dr \wedge d\varphi) = \frac{1}{r}}
+\end{equation*}
+
+\subsubsection*{c)}
+1. Step: Compute $df$:
+\begin{equation*}
+	df = \frac{\partial f}{\partial r} dr + \frac{\partial f}{\partial \varphi} d\varphi
+\end{equation*}
+2. Step: Compute $\star df$:
+\begin{align*}
+	\star df &= \star \left(\frac{\partial f}{\partial r} dr + \frac{\partial f}{\partial \varphi} d\varphi\right)\\
+	&= \frac{\partial f}{\partial r} \star dr + \frac{\partial f}{\partial \varphi} \star d\varphi\\
+	&= \frac{\partial f}{\partial r} (r d\varphi) + \frac{\partial f}{\partial \varphi} \left(-\frac{1}{r} dr\right)\\
+	&= r \frac{\partial f}{\partial r} d\varphi - \frac{1}{r} \frac{\partial f}{\partial \varphi} dr
+\end{align*}
+3. Step: Compute $d \star df$:
+\begin{align*}
+	d \star df &= d\left(r \frac{\partial f}{\partial r} d\varphi - \frac{1}{r} \frac{\partial f}{\partial \varphi} dr\right)\\
+	&= d\left(r \frac{\partial f}{\partial r} d\varphi\right) - d\left(\frac{1}{r} \frac{\partial f}{\partial \varphi} dr\right)\\
+	&= \frac{\partial}{\partial r}\left(r \frac{\partial f}{\partial r}\right) dr \wedge d\varphi + \frac{\partial}{\partial \varphi}\left(- \frac{1}{r} \frac{\partial f}{\partial \varphi}\right) d\varphi \wedge dr\\
+	&= \left[\frac{\partial}{\partial r}\left(r \frac{\partial f}{\partial r}\right) + \frac{\partial}{\partial \varphi}\left(\frac{1}{r} \frac{\partial f}{\partial \varphi}\right)\right] dr \wedge d\varphi
+\end{align*}
+4. Step: Compute $\star d \star df$:
+\begin{align*}
+	\star d \star df &= \star \left[\left(\frac{\partial}{\partial r}\left(r \frac{\partial f}{\partial r}\right) + \frac{\partial}{\partial \varphi}\left(\frac{1}{r} \frac{\partial f}{\partial \varphi}\right)\right) dr \wedge d\varphi\right]\\
+	&= \left(\frac{\partial}{\partial r}\left(r \frac{\partial f}{\partial r}\right) + \frac{\partial}{\partial \varphi}\left(\frac{1}{r} \frac{\partial f}{\partial \varphi}\right)\right) \star (dr \wedge d\varphi)\\
+	&= \left(\frac{\partial}{\partial r}\left(r \frac{\partial f}{\partial r}\right) + \frac{\partial}{\partial \varphi}\left(\frac{1}{r} \frac{\partial f}{\partial \varphi}\right)\right) \cdot \frac{1}{r}\\
+	&= \frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial f}{\partial r}\right) + \frac{1}{r} \frac{\partial}{\partial \varphi}\left( \frac{1}{r}\frac{\partial f}{\partial \varphi}\right)\\
+	&= \frac{1}{r} \frac{\partial}{\partial r}\left(r \frac{\partial f}{\partial r}\right) + \frac{1}{r^2} \left( \frac{\partial^2 f}{\partial \varphi^2}\right)\\
+	&= \Delta f
+\end{align*}
+
+\end{document}
