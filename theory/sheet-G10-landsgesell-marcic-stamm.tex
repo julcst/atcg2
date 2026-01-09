@@ -193,4 +193,42 @@ Robin Landsgesell, Jonas Marcic, Julian Stamm
 	&= \Delta f
 \end{align*}
 
+\subsection*{Assignment 4}
+\begin{center}
+	Parametrization:
+\end{center}
+\begin{align*}
+	x = (R + r\cos\theta)\cos\varphi&, \quad y = (R + r\cos\theta)\sin\varphi\\
+	&\implies\\
+	x^2 + y^2 &= (R + r\cos\theta)^2\\
+\end{align*}
+\begin{align*}
+	(\Phi^{-1})^*(dx \wedge dy) &= det\begin{pmatrix}
+		\frac{\partial x}{\partial \theta} & \frac{\partial x}{\partial \varphi}\\
+		\frac{\partial y}{\partial \theta} & \frac{\partial y}{\partial \varphi}
+		\end{pmatrix} d\theta \wedge d\varphi\\
+		&= det\begin{pmatrix}
+		-r\sin\theta \cos\varphi & -(R + r\cos\theta)\sin\varphi\\
+		-r\sin\theta \sin\varphi & (R + r\cos\theta)\cos\varphi
+		\end{pmatrix} d\theta \wedge d\varphi\\
+		&= \left(-r\sin\theta \cos\varphi \cdot (R + r\cos\theta)\cos\varphi - (-(R + r\cos\theta)\sin\varphi) \cdot (-r\sin\theta \sin\varphi)\right) d\theta \wedge d\varphi\\
+		&= \left(-r\sin\theta (R + r\cos\theta)(\cos^2\varphi + \sin^2\varphi)\right) d\theta \wedge d\varphi\\
+		&= -r\sin\theta (R + r\cos\theta)\, d\theta \wedge d\varphi\\
+\end{align*}
+\begin{align*}
+	\int_\text{upper half Torus} x^2 + y^2 dx \wedge dy &= \int_0^{2\pi} \int_0^{\pi} (x^2+y^2) \circ \Phi^{-1}(\theta, \varphi) \cdot T^*\Phi^{-1}(dx \wedge dy)\\
+	&\text{Plugin $x^2 + y^2$ from above}\\
+	&= \int_0^{2\pi} \int_0^{\pi} (R + r\cos\theta)^2 \cdot T^*\Phi^{-1}(dx \wedge dy)\\
+	&\text{Plugin }T^*\Phi^{-1}(dx \wedge dy) \text{ from above}\\
+	&= \int_0^{2\pi} \int_0^{\pi} (R + r\cos\theta)^2 \cdot -r\sin\theta (R + r\cos\theta) \,d\theta \wedge d\varphi\\
+	&= \int_0^{2\pi} \int_0^{\pi} -r\sin\theta (R + r\cos\theta)^3 \,d\theta d\varphi\\
+\end{align*}
+\begin{center}
+	Using WolframAlpha to compute the integral:
+\end{center}
+\begin{align*}
+	\int_0^{2\pi} \int_0^{\pi} -r\sin\theta (R + r\cos\theta)^3 \,d\theta d\varphi &= -4\pi rR(r^2+R^2)
+\end{align*}
+
+
 \end{document}
