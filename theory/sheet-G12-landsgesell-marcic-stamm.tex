@@ -1,0 +1,38 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{bigints}
+\input{macros}
+\begin{document}
+
+\section*{Sheet G12 - Heat Methods}
+Robin Landsgesell, Jonas Marcic, Julian Stamm
+
+\subsection*{Assignment 2}
+Let $\alpha_i$ and $\phi_i$ eigenvalue and eigenfunction of Laplace $\Delta$:
+\begin{align*}
+	G(x,y) = \sum_{i=1}^\infty \alpha_i(y)\phi_i(x)
+\end{align*}
+Apply Laplace $\Delta$:
+\begin{align*}
+	\Delta G(x,y) &= \Delta\sum_{i=1}^\infty \alpha_i(y)\phi_i(x)\\
+	&= \sum_{i=1}^\infty \alpha_i(y)\Delta\phi_i(x)\\
+	&= \sum_{i=1}^\infty \alpha_i(y)\lambda_i\phi_i(x)
+\end{align*}
+Apply $\Delta G(x,y) = \delta(x-y) = \sum_{i=1}^\infty \phi_i(x)^*\phi_i(y)$
+\begin{align*}
+	\Delta G(x,y) &= \sum_{i=1}^\infty \alpha_i(y)\lambda_i\phi_i(x)\\
+	\sum_{i=1}^\infty \phi_i(x)^*\phi_i(y) &= \sum_{i=1}^\infty \alpha_i(y)\lambda_i\phi_i(x)\\
+	&\implies \alpha_i(y) = \frac{\phi_i(y)}{\lambda_i}
+\end{align*}
+Plug $\alpha_i$ into $G(x,y) = \sum_{i=1}^\infty \alpha_i(y)\phi_i(x)$:
+\begin{align*}
+	G(x,y) &= \sum_{i=1}^\infty \alpha_i(y)\phi_i(x)\\
+	&= \sum_{i=1}^\infty \frac{\phi_i(y)}{\lambda_i}\phi_i(x)\\
+	&= \sum_{i=1}^\infty \frac{\phi_i(x)^*\phi_i(y)}{\lambda_i} \quad \square
+\end{align*}
+
+\end{document}
