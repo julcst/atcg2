@@ -165,7 +165,6 @@ public:
         Eigen::SparseMatrix<double> Lc   = laplace.S;
         this->luAtLc.compute(AtLc);
         this->luLc.compute(Lc);
-        //
     }
 
     void compute_heat_geodesics(const std::shared_ptr<atcg::Mesh>& mesh,
@@ -181,7 +180,6 @@ public:
         ///           Store the result in an Eigen::VectorXd u
 
         Eigen::VectorXd u = this->luAtLc.solve(u0);
-        //
 
         std::vector<OpenMesh::Vec3d> face_grad_u(mesh->n_faces(), OpenMesh::Vec3d(0, 0, 0));
         for(auto fh: mesh->faces())
@@ -200,7 +198,6 @@ public:
                 face_grad_u[fh.idx()] -= u[vh.idx()] * step;    // Flipped sign
             }
             face_grad_u[fh.idx()].normalize();    // Normalized
-            //
         }
 
         Eigen::VectorXd vertex_div_u = Eigen::VectorXd::Zero(mesh->n_vertices());
@@ -217,22 +214,28 @@ public:
                 // except when the current edge is a boundary edge. In that case
                 // we skip it, as it will be the next_heh of another halfedge later.
                 if(mesh->is_boundary(*h_it)) continue;
+                
+                auto fh = mesh->face_handle(*h_it);
                 auto next_heh = mesh->next_halfedge_handle(*h_it);
-                auto p0       = mesh->point(mesh->from_vertex_handle(*h_it));
-                auto p1       = mesh->point(mesh->to_vertex_handle(*h_it));
-                auto edge_vec = p1 - p0;
-                auto fh       = mesh->face_handle(*h_it);
-                auto X        = face_grad_u[fh.idx()];
-                auto n        = mesh->normal(fh);
-                div += 0.5 * X.dot(n.cross(edge_vec));
-                //
+                auto pj = mesh->point(mesh->to_vertex_handle(*h_it));
+                auto pk = mesh->point(mesh->to_vertex_handle(next_heh));
+                
+                auto eij = pj - pi;
+                auto eik = pk - pi;
+                
+                LaplaceCotan<double> laplace_builder;
+                double cot_k = laplace_builder.triangleCotan(pi, pj, pk);
+                double cot_j = laplace_builder.triangleCotan(pi, pk, pj);
+                
+                auto X = face_grad_u[fh.idx()];
+                
+                // Divergence formula
+                div += 0.5 * (cot_j * (eik | X) + cot_k * (eij | X));
             }
         }
 
         /// Exercise: Solve for phi using the vertex divergence and the precomputed matrices Lc
-        Eigen::VectorXd phi;
-        phi = this->luLc.solve(vertex_div_u);
-        //
+        Eigen::VectorXd phi = luLc.solve(vertex_div_u);
 
         for(auto vh: mesh->vertices()) { mesh->property(distance_property, vh) = phi[vh.idx()]; }
     }
