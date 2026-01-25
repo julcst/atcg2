@@ -159,8 +159,13 @@ public:
     {
         /// Exercise: Prefactor the matrices A-tL_C and L_C
         ///           Use this->luAtLc and this->luLc for this
-
-        // 
+        LaplaceCotan<double> laplace_calculator;
+        atcg::Laplacian<double> laplace  = laplace_calculator.calculate(mesh);
+        Eigen::SparseMatrix<double> AtLc = laplace.M - t * laplace.S;
+        Eigen::SparseMatrix<double> Lc   = laplace.S;
+        this->luAtLc.compute(AtLc);
+        this->luLc.compute(Lc);
+        //
     }
 
     void compute_heat_geodesics(const std::shared_ptr<atcg::Mesh>& mesh,
@@ -175,16 +180,27 @@ public:
         /// Exercise: Use the precomputed matrices to solve the heat equation for one time step
         ///           Store the result in an Eigen::VectorXd u
 
-        Eigen::VectorXd u;
-        // 
+        Eigen::VectorXd u = this->luAtLc.solve(u0);
+        //
 
         std::vector<OpenMesh::Vec3d> face_grad_u(mesh->n_faces(), OpenMesh::Vec3d(0, 0, 0));
         for(auto fh: mesh->faces())
         {
             /// Exercise: Compute grad(u) for each triangle inside the mesh
             ///           Use mesh->opposite_halfedge_handle to get the half edge opposite to a given vertex
-
-            // 
+            const auto n = mesh->normal(fh);
+            for(auto vh: fh.vertices())
+            {
+                auto heh  = mesh->opposite_halfedge_handle(fh, vh);
+                auto v0   = mesh->from_vertex_handle(heh);
+                auto v1   = mesh->to_vertex_handle(heh);
+                auto p0   = mesh->point(v0);
+                auto p1   = mesh->point(v1);
+                auto step = n.cross(p1 - p0);
+                face_grad_u[fh.idx()] -= u[vh.idx()] * step;    // Flipped sign
+            }
+            face_grad_u[fh.idx()].normalize();    // Normalized
+            //
         }
 
         Eigen::VectorXd vertex_div_u = Eigen::VectorXd::Zero(mesh->n_vertices());
@@ -200,14 +216,23 @@ public:
                 // The edge and the next edge belong to a common face,
                 // except when the current edge is a boundary edge. In that case
                 // we skip it, as it will be the next_heh of another halfedge later.
-
-                // 
+                if(mesh->is_boundary(*h_it)) continue;
+                auto next_heh = mesh->next_halfedge_handle(*h_it);
+                auto p0       = mesh->point(mesh->from_vertex_handle(*h_it));
+                auto p1       = mesh->point(mesh->to_vertex_handle(*h_it));
+                auto edge_vec = p1 - p0;
+                auto fh       = mesh->face_handle(*h_it);
+                auto X        = face_grad_u[fh.idx()];
+                auto n        = mesh->normal(fh);
+                div += 0.5 * X.dot(n.cross(edge_vec));
+                //
             }
         }
 
         /// Exercise: Solve for phi using the vertex divergence and the precomputed matrices Lc
         Eigen::VectorXd phi;
-        // 
+        phi = this->luLc.solve(vertex_div_u);
+        //
 
         for(auto vh: mesh->vertices()) { mesh->property(distance_property, vh) = phi[vh.idx()]; }
     }
